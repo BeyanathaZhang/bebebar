@@ -1,0 +1,1744 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>琥珀酒馆 · AMBER TAVERN</title>
+<style>
+/* ==========================================================================
+   琥珀酒馆 · 样式表
+   风格：深色木质 + 黄铜金 + 暖光，衬线标题，克制的动效
+   注意：全部内联，无外部字体/图片，双击即可打开
+   ========================================================================== */
+
+:root{
+  --ink:#080604;
+  --ink-2:#0f0b07;
+  --panel:#151009;
+  --panel-2:#1c150d;
+  --gold:#c9a227;
+  --gold-l:#e8cd8a;
+  --gold-d:#8a6d18;
+  --cream:#f4ecdd;
+  --muted:#9c8f7a;
+  --muted-2:#6d6355;
+  --wine:#5d1e26;
+  --line:rgba(201,162,39,.20);
+  --line-2:rgba(201,162,39,.42);
+  --serif:Georgia,"Songti SC","STSong","SimSun","Noto Serif SC",serif;
+  --sans:"Segoe UI","PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(1200px 820px at 50% -12%, rgba(201,162,39,.10), transparent 62%),
+    radial-gradient(900px 620px at 92% 108%, rgba(93,30,38,.20), transparent 62%),
+    linear-gradient(#080604,#040302);
+  color:var(--cream);
+  font-family:var(--sans);
+  font-size:15px;
+  line-height:1.7;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* 胶片颗粒 */
+.grain{
+  position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.30;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+.vignette{
+  position:fixed;inset:0;z-index:9997;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 45%, transparent 45%, rgba(0,0,0,.72) 100%);
+}
+
+/* --------------------------------------------------------------- 页面系统 */
+.page{
+  position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
+  opacity:0;visibility:hidden;transform:translateY(14px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease), visibility .6s;
+  -webkit-overflow-scrolling:touch;
+}
+.page.active{opacity:1;visibility:visible;transform:none}
+
+.kicker{
+  font-size:11px;letter-spacing:.42em;color:var(--gold);
+  text-transform:uppercase;font-family:var(--sans);
+}
+
+/* --------------------------------------------------------------- 按钮 */
+.btn{
+  font-family:var(--sans);font-size:14px;letter-spacing:.12em;
+  padding:14px 38px;border-radius:2px;cursor:pointer;border:0;
+  transition:.35s var(--ease);position:relative;overflow:hidden;
+}
+.btn-gold{
+  background:linear-gradient(135deg,#e8cd8a,#c9a227 45%,#a9821a);
+  color:#221703;font-weight:600;
+  box-shadow:0 10px 34px -14px rgba(201,162,39,.95), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 16px 40px -14px rgba(201,162,39,1), inset 0 1px 0 rgba(255,255,255,.6)}
+.btn-gold:disabled{opacity:.55;cursor:default;transform:none}
+.btn-line{
+  background:transparent;color:var(--gold-l);
+  border:1px solid var(--line-2);
+}
+.btn-line:hover{background:rgba(201,162,39,.10);border-color:var(--gold);color:#fff}
+
+/* ==========================================================================
+   一、欢迎页
+   ========================================================================== */
+#page-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.tavern-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+
+.welcome-inner{position:relative;z-index:2;padding:40px 24px;max-width:900px}
+
+.welcome-mark{
+  width:64px;height:64px;margin:0 auto 30px;border:1px solid var(--line-2);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:26px;color:var(--gold);
+  animation:fadeUp 1.2s var(--ease) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+.welcome-kicker{animation:fadeUp 1.2s .12s var(--ease) both}
+
+.hero-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(52px,9vw,116px);line-height:1.06;
+  letter-spacing:.14em;margin:22px 0 0 .14em;
+  color:#f7f0e2;
+  text-shadow:0 0 60px rgba(201,162,39,.28), 0 2px 0 rgba(0,0,0,.6);
+  animation:fadeUp 1.4s .2s var(--ease) both;
+}
+.hero-sub{
+  font-family:var(--serif);font-size:clamp(13px,1.5vw,17px);
+  letter-spacing:.55em;color:var(--gold);margin-top:18px;text-indent:.55em;
+  animation:fadeUp 1.4s .32s var(--ease) both;
+}
+.hero-desc{
+  color:var(--muted);font-size:14px;line-height:2;margin:34px auto 0;max-width:520px;
+  animation:fadeUp 1.4s .44s var(--ease) both;
+}
+.divider{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:34px auto;width:220px;animation:fadeUp 1.4s .44s var(--ease) both;
+}
+.divider i{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line-2))}
+.divider i:last-child{background:linear-gradient(270deg,transparent,var(--line-2))}
+.divider span{width:5px;height:5px;background:var(--gold);transform:rotate(45deg)}
+
+.enter-wrap{animation:fadeUp 1.4s .56s var(--ease) both}
+.btn-enter{
+  background:transparent;border:1px solid var(--line-2);color:var(--gold-l);
+  font-family:var(--serif);font-size:16px;letter-spacing:.42em;text-indent:.42em;
+  padding:18px 56px;border-radius:1px;cursor:pointer;
+  transition:.45s var(--ease);position:relative;
+}
+.btn-enter::before{
+  content:'';position:absolute;inset:0;background:linear-gradient(135deg,#e8cd8a,#c9a227);
+  opacity:0;transition:.45s var(--ease);z-index:-1;
+}
+.btn-enter:hover{color:#1b1305;border-color:var(--gold)}
+.btn-enter:hover::before{opacity:1}
+.btn-enter:hover{box-shadow:0 20px 50px -20px rgba(201,162,39,.9)}
+
+.welcome-foot{
+  position:absolute;bottom:34px;left:0;right:0;z-index:2;
+  display:flex;justify-content:center;gap:34px;
+  font-size:11px;letter-spacing:.22em;color:var(--muted-2);
+  animation:fadeUp 1.6s .8s var(--ease) both;
+}
+.welcome-foot span{display:flex;align-items:center;gap:8px}
+.live-dot{width:5px;height:5px;border-radius:50%;background:#69c98a;box-shadow:0 0 10px #69c98a;animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ==========================================================================
+   二、点单页
+   ========================================================================== */
+#page-order{padding:0 clamp(20px,5vw,72px) 80px}
+
+.order-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:26px 0 22px;border-bottom:1px solid var(--line);margin-bottom:0;
+  position:sticky;top:0;z-index:20;
+  background:linear-gradient(180deg,rgba(8,6,4,.96) 60%,rgba(8,6,4,0));
+  backdrop-filter:blur(6px);
+}
+.brand{display:flex;align-items:baseline;gap:14px}
+.brand b{font-family:var(--serif);font-size:19px;font-weight:400;letter-spacing:.3em;color:#f2e8d6}
+.brand i{font-style:normal;font-size:10px;letter-spacing:.34em;color:var(--muted-2)}
+.head-right{display:flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.2em;color:var(--muted-2)}
+
+.menu-intro{padding:56px 0 40px;text-align:center}
+.menu-intro h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,46px);
+  letter-spacing:.3em;text-indent:.3em;margin:16px 0 12px;
+}
+.menu-intro p{color:var(--muted);font-size:13px;letter-spacing:.16em}
+
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(18px,2.2vw,30px);
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008));
+  border:1px solid rgba(201,162,39,.13);
+  cursor:pointer;transition:.45s var(--ease);position:relative;
+}
+.card:hover{
+  border-color:rgba(201,162,39,.5);transform:translateY(-6px);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.9), 0 0 0 1px rgba(201,162,39,.18);
+}
+.card-art{
+  position:relative;overflow:hidden;aspect-ratio:4/4.6;
+  background:#0b0806;
+}
+.card-art svg{width:100%;height:100%;display:block;transition:transform 1.1s var(--ease)}
+.card:hover .card-art svg{transform:scale(1.055)}
+.card-art::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(8,6,4,.85) 100%);
+}
+.abv{
+  position:absolute;right:12px;bottom:12px;z-index:2;
+  display:flex;flex-direction:column;align-items:flex-end;gap:1px;
+  padding:7px 11px;border:1px solid rgba(232,205,138,.42);
+  background:rgba(10,7,5,.62);backdrop-filter:blur(8px);
+}
+.abv b{font-family:var(--serif);font-size:16px;color:var(--gold-l);font-weight:400;line-height:1}
+.abv small{font-size:8px;letter-spacing:.26em;color:var(--muted);line-height:1.4}
+
+.card-body{padding:18px 20px 20px}
+.card-body h3{font-family:var(--serif);font-weight:400;font-size:21px;letter-spacing:.18em}
+.card-body .en{font-size:10px;letter-spacing:.34em;color:var(--muted-2);margin-top:5px;text-transform:uppercase}
+.card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.05)}
+.tagline{font-size:11px;color:var(--muted);letter-spacing:.08em}
+.card-price{font-family:var(--serif);font-size:19px;color:var(--gold-l)}
+.card-price small{font-size:11px;margin-right:2px;opacity:.8}
+
+.order-foot{
+  margin-top:60px;text-align:center;font-size:11px;letter-spacing:.24em;
+  color:var(--muted-2);line-height:2.4;
+}
+
+/* ==========================================================================
+   三、弹窗
+   ========================================================================== */
+.modal{
+  position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;visibility:hidden;transition:.4s var(--ease);
+  background:rgba(4,3,2,.82);backdrop-filter:blur(10px);
+}
+.modal.open{opacity:1;visibility:visible}
+.modal-card{
+  position:relative;width:100%;max-width:900px;max-height:90vh;overflow-y:auto;
+  background:
+    radial-gradient(600px 300px at 0% 0%, rgba(201,162,39,.07), transparent 70%),
+    linear-gradient(180deg,#1a130c,#0e0a06);
+  border:1px solid var(--line-2);
+  box-shadow:0 50px 120px -40px #000, inset 0 1px 0 rgba(255,255,255,.06);
+  transform:scale(.97) translateY(10px);transition:.4s var(--ease);
+}
+.modal.open .modal-card{transform:none}
+.close{
+  position:absolute;top:14px;right:16px;z-index:5;
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(10,7,5,.6);color:var(--muted);font-size:18px;cursor:pointer;
+  transition:.3s;line-height:1;
+}
+.close:hover{color:var(--gold-l);border-color:var(--gold);transform:rotate(90deg)}
+
+/* 详情弹窗 */
+.detail-card{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+.detail-left{position:relative;min-height:420px;background:#0a0705;border-right:1px solid rgba(201,162,39,.14)}
+.detail-left svg{width:100%;height:100%;display:block;position:absolute;inset:0}
+.detail-right{padding:clamp(28px,3.4vw,46px);display:flex;flex-direction:column}
+.detail-right h2{
+  font-family:var(--serif);font-weight:400;font-size:clamp(28px,3vw,38px);
+  letter-spacing:.16em;margin:12px 0 4px;
+}
+.detail-right .en{font-size:10px;letter-spacing:.36em;color:var(--muted-2);text-transform:uppercase}
+.story{color:#c3b7a2;font-size:13.5px;line-height:2.1;margin:24px 0 22px;letter-spacing:.03em}
+
+.specs{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:22px}
+.spec{flex:1;padding:14px 0;text-align:center;border-right:1px solid rgba(255,255,255,.07)}
+.spec:last-child{border-right:0}
+.spec b{display:block;font-family:var(--serif);font-size:19px;font-weight:400;color:var(--gold-l)}
+.spec span{font-size:10px;letter-spacing:.22em;color:var(--muted-2)}
+
+.ing{list-style:none;margin-bottom:8px}
+.ing li{display:flex;align-items:center;gap:11px;font-size:13px;color:#bdb2a0;padding:7px 0}
+.ing i{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.ing em{font-style:normal;margin-left:auto;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+
+.detail-pay{margin-top:auto;padding-top:24px;display:flex;align-items:center;justify-content:flex-end;gap:26px}
+.price-big{font-family:var(--serif);font-size:38px;color:var(--gold-l);line-height:1}
+.price-big small{font-size:16px;margin-right:3px;opacity:.8}
+
+/* 支付弹窗 */
+.pay-card{max-width:480px;padding:clamp(26px,3vw,38px)}
+.pay-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:26px}
+.pay-head h3{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:.16em;margin-top:8px}
+.amount{font-family:var(--serif);font-size:32px;color:var(--gold-l)}
+.amount small{font-size:14px;opacity:.8;margin-right:2px}
+
+.pay-tabs{display:flex;gap:0;border:1px solid rgba(255,255,255,.09);margin-bottom:24px}
+.tab{
+  flex:1;padding:12px;background:transparent;border:0;cursor:pointer;
+  color:var(--muted);font-family:var(--sans);font-size:13px;letter-spacing:.1em;
+  transition:.3s;border-right:1px solid rgba(255,255,255,.09);
+}
+.tab:last-child{border-right:0}
+.tab.active{background:rgba(201,162,39,.12);color:var(--gold-l)}
+
+.qr-wrap{display:flex;justify-content:center;margin-bottom:18px}
+.qr{display:none;flex-direction:column;align-items:center;gap:14px}
+.qr.show{display:flex}
+.qr-box{
+  width:210px;height:210px;background:#fff;padding:10px;
+  box-shadow:0 0 0 1px rgba(201,162,39,.35), 0 20px 50px -20px rgba(0,0,0,.9);
+  position:relative;
+}
+.qr-box svg{width:100%;height:100%;display:block;shape-rendering:crispEdges}
+.qr-brand{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.14em;color:var(--muted)}
+.qr-dot{width:8px;height:8px;border-radius:2px}
+
+.pay-tip{text-align:center;font-size:11.5px;color:var(--muted-2);letter-spacing:.1em;line-height:1.9}
+.pay-demo{
+  margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+}
+.pay-demo span{font-size:11px;color:var(--muted-2);line-height:1.6;max-width:190px}
+.pay-demo .btn-gold{padding:12px 22px;font-size:13px;letter-spacing:.06em}
+
+/* ==========================================================================
+   四、制作页
+   ========================================================================== */
+#page-make{display:flex;flex-direction:column;overflow:hidden}
+.make-head{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:18px clamp(18px,3vw,36px);border-bottom:1px solid var(--line);
+  background:rgba(8,6,4,.7);backdrop-filter:blur(8px);z-index:10;
+}
+.make-head .brand b{font-size:16px}
+.make-progress{display:flex;align-items:center;gap:16px}
+.abort{
+  font-family:var(--sans);font-size:11px;letter-spacing:.2em;
+  background:transparent;border:1px solid rgba(255,255,255,.14);color:var(--muted-2);
+  padding:7px 14px;cursor:pointer;transition:.3s;border-radius:2px;
+}
+.abort:hover{border-color:#c96a6a;color:#e79a9a;background:rgba(93,30,38,.25)}
+.pbar{width:min(30vw,260px);height:2px;background:rgba(255,255,255,.09);position:relative;overflow:hidden}
+.pbar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transition:width .35s linear}
+.pct{font-family:var(--serif);font-size:17px;color:var(--gold-l);min-width:52px;text-align:right}
+
+.make-grid{
+  flex:1 1 auto;min-height:0;display:grid;
+  grid-template-columns:minmax(260px,.78fr) minmax(0,1.7fr) minmax(280px,.86fr);
+  gap:clamp(14px,1.6vw,24px);padding:clamp(14px,1.8vw,26px);
+  padding-bottom:clamp(14px,1.8vw,26px);
+}
+
+/* 左栏 */
+.col-left{display:flex;flex-direction:column;gap:14px;min-height:0;overflow-y:auto;padding-right:4px}
+.mix-card{border:1px solid rgba(201,162,39,.18);background:linear-gradient(180deg,rgba(201,162,39,.06),rgba(255,255,255,.012))}
+.mix-art{aspect-ratio:4/3.4;overflow:hidden;border-bottom:1px solid rgba(201,162,39,.14)}
+.mix-art svg{width:100%;height:100%;display:block}
+.mix-body{padding:18px}
+.mix-body h3{font-family:var(--serif);font-weight:400;font-size:24px;letter-spacing:.2em}
+.mix-body .en{font-size:9.5px;letter-spacing:.34em;color:var(--muted-2);margin-top:4px;text-transform:uppercase}
+.mix-specs{display:flex;gap:12px;margin-top:14px;font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.mix-specs span{display:flex;align-items:center;gap:6px}
+.mix-specs span::before{content:'';width:3px;height:3px;background:var(--gold);transform:rotate(45deg)}
+
+.note{
+  border-left:1px solid rgba(201,162,39,.3);padding:2px 0 2px 14px;
+  font-size:12px;line-height:2;color:#b0a48f;
+}
+.block{border:1px solid rgba(255,255,255,.06);padding:16px 18px;background:rgba(255,255,255,.014)}
+.block-title{font-size:10px;letter-spacing:.3em;color:var(--muted-2);margin-bottom:14px;display:flex;justify-content:space-between}
+.block-title b{color:var(--muted);font-weight:400;letter-spacing:.1em}
+
+.recipe{list-style:none}
+.recipe li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.05);font-size:13px;color:#a99d89;transition:.3s}
+.recipe li:last-child{border-bottom:0}
+.recipe .sw{width:8px;height:8px;border-radius:50%;flex:0 0 auto;opacity:.85}
+.recipe .nm{flex:1}
+.recipe .ml{font-size:11.5px;color:var(--muted-2);font-variant-numeric:tabular-nums}
+.recipe li.done{color:#8fd6a8}
+.recipe li.done .ml{color:#6fae85}
+.recipe li.on{color:var(--gold-l)}
+.recipe li.on .ml{color:var(--gold)}
+.recipe li.on .sw{animation:blink 1.1s infinite}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* 中栏 */
+.col-mid{display:flex;flex-direction:column;min-height:0;gap:14px}
+.scene-box{
+  flex:1 1 auto;min-height:200px;position:relative;overflow:hidden;
+  border:1px solid rgba(201,162,39,.16);
+  background:
+    radial-gradient(700px 380px at 42% 108%, rgba(201,162,39,.10), transparent 68%),
+    linear-gradient(180deg,#12100c,#080605);
+}
+.scene-box svg{width:100%;height:100%;display:block}
+.scene-caption{
+  position:absolute;left:18px;bottom:16px;font-size:12px;letter-spacing:.1em;
+  color:var(--gold-l);background:rgba(6,4,3,.6);border:1px solid rgba(201,162,39,.22);
+  padding:7px 15px;backdrop-filter:blur(6px);
+}
+.timeline{display:flex;gap:10px;flex:0 0 auto}
+.tl-item{
+  flex:1;border:1px solid rgba(255,255,255,.07);padding:10px 12px;
+  background:rgba(255,255,255,.014);transition:.4s;
+}
+.tl-item .n{font-size:9px;letter-spacing:.24em;color:var(--muted-2)}
+.tl-item .t{font-size:12px;color:#a99d89;margin-top:4px}
+.tl-item.on{border-color:rgba(201,162,39,.55);background:rgba(201,162,39,.09)}
+.tl-item.on .t{color:var(--gold-l)}
+.tl-item.done{border-color:rgba(143,214,168,.32)}
+.tl-item.done .t{color:#8fd6a8}
+
+/* 右栏 */
+.col-right{display:flex;flex-direction:column;min-height:0;gap:12px;
+  border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.012);padding:16px}
+
+.voice-head{text-align:center;padding:8px 0 4px;position:relative}
+.orb{
+  width:88px;height:88px;margin:0 auto 16px;border-radius:50%;position:relative;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  background:radial-gradient(circle at 34% 28%,#3a3222,#141008);
+  border:1px solid rgba(201,162,39,.28);
+  transition:.5s var(--ease);
+}
+.orb .ring{position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(201,162,39,.5);opacity:0}
+.orb.speaking{background:radial-gradient(circle at 34% 28%,#5c4a22,#1d1509);border-color:rgba(232,205,138,.6)}
+.orb.speaking .ring{animation:ripple 1.8s infinite}
+.orb.speaking .ring.r2{animation-delay:.9s}
+@keyframes ripple{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.75);opacity:0}}
+.orb.listening{background:radial-gradient(circle at 34% 28%,#1f4a3c,#0a1512);border-color:rgba(105,201,138,.5)}
+.voice-state{font-family:var(--serif);font-size:16px;letter-spacing:.24em;color:#e6dcc8}
+.voice-sub{font-size:10.5px;letter-spacing:.16em;color:var(--muted-2);margin-top:5px}
+
+.wave{display:flex;align-items:center;justify-content:center;gap:3px;height:26px;margin-top:14px}
+.wave i{width:2px;background:linear-gradient(180deg,var(--gold-l),var(--gold-d));border-radius:2px;height:6px;opacity:.35}
+.wave.on i{animation:wave 1s var(--ease) infinite}
+.wave.on i:nth-child(2n){animation-duration:.72s}
+.wave.on i:nth-child(3n){animation-duration:1.28s}
+@keyframes wave{0%,100%{height:5px;opacity:.4}50%{height:22px;opacity:1}}
+
+.chat{
+  flex:1 1 auto;min-height:120px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;
+  padding:6px 2px;scrollbar-width:thin;
+}
+.bubble{
+  max-width:92%;padding:9px 13px;font-size:12.5px;line-height:1.75;
+  border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);
+  color:#c0b5a1;animation:popIn .45s var(--ease) both;
+}
+@keyframes popIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.bubble.bot{border-left:2px solid var(--gold);align-self:flex-start;border-radius:0 4px 4px 0}
+.bubble.user{align-self:flex-end;border-right:2px solid #69c98a;background:rgba(105,201,138,.07);border-radius:4px 0 0 4px;color:#b7d8c3}
+
+.quick{display:flex;flex-wrap:wrap;gap:7px}
+.quick button{
+  font-family:var(--sans);font-size:11px;padding:7px 12px;cursor:pointer;
+  background:transparent;border:1px solid rgba(255,255,255,.1);color:var(--muted);
+  transition:.3s;border-radius:2px;
+}
+.quick button:hover{border-color:var(--gold);color:var(--gold-l);background:rgba(201,162,39,.08)}
+
+.mic-row{display:flex;align-items:center;gap:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.mic{
+  flex:0 0 auto;width:44px;height:44px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(201,162,39,.35);background:rgba(201,162,39,.08);
+  color:var(--gold-l);font-size:17px;transition:.3s;
+}
+.mic:hover{background:rgba(201,162,39,.2)}
+.mic.rec{background:rgba(93,30,38,.55);border-color:#c96a6a;color:#ffb3b3;animation:pulse 1.2s infinite}
+.mode{font-size:9.5px;letter-spacing:.14em;color:var(--muted-2);line-height:1.6}
+
+/* ==========================================================================
+   五、完成页
+   ========================================================================== */
+#page-done{display:flex;align-items:center;justify-content:center;text-align:center}
+.done-wrap{position:relative;z-index:2;padding:40px 24px;max-width:760px}
+.done-art{
+  width:clamp(150px,20vw,220px);margin:0 auto 10px;aspect-ratio:4/4.6;
+  animation:riseIn 1.1s var(--ease) both;
+}
+.done-art svg{width:100%;height:100%}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px) scale(.96)}to{opacity:1;transform:none}}
+
+.done-title{
+  font-family:var(--serif);font-weight:400;font-size:clamp(32px,5vw,56px);
+  letter-spacing:.2em;text-indent:.2em;margin:14px 0 12px;
+  animation:fadeUp 1.2s .2s var(--ease) both;
+}
+.done-sub{color:var(--muted);font-size:13.5px;letter-spacing:.2em;animation:fadeUp 1.2s .32s var(--ease) both}
+.done-line{
+  width:1px;height:52px;margin:34px auto;background:linear-gradient(180deg,var(--line-2),transparent);
+  animation:fadeUp 1.2s .4s var(--ease) both;
+}
+.done-voice{
+  max-width:520px;margin:0 auto;min-height:96px;
+  display:flex;flex-direction:column;gap:10px;align-items:center;
+  animation:fadeUp 1.2s .46s var(--ease) both;
+}
+.done-voice .bubble{max-width:100%;text-align:left}
+.done-actions{display:flex;justify-content:center;gap:14px;margin-top:40px;animation:fadeUp 1.2s .6s var(--ease) both}
+
+/* --------------------------------------------------------------- 小屏 */
+@media (max-width:1180px){
+  .make-grid{grid-template-columns:1fr;overflow-y:auto}
+  .col-left,.col-mid,.col-right{overflow:visible}
+  .scene-box{min-height:320px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .detail-card{grid-template-columns:1fr}
+  .detail-left{min-height:280px;position:relative}
+}
+@media (max-width:720px){
+  .grid{grid-template-columns:1fr}
+  .menu-intro{padding:36px 0 26px}
+  .hero-title{letter-spacing:.08em;margin-left:.08em}
+  .order-head{padding:18px 0}
+  .head-right{display:none}
+  .welcome-foot{gap:16px;font-size:9px}
+  .timeline{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- ======================================================================
+     一、欢迎页
+     ====================================================================== -->
+<section class="page active" id="page-welcome">
+  <div id="tavern-host"></div>
+  <div class="welcome-inner">
+    <div class="welcome-mark">A</div>
+    <div class="welcome-kicker kicker">CRAFT COCKTAIL · EST. 2026</div>
+    <h1 class="hero-title">琥珀酒馆</h1>
+    <div class="hero-sub">AMBER TAVERN</div>
+    <div class="divider"><i></i><span></span><i></i></div>
+    <p class="hero-desc">
+      一台会听你说话的机械臂，<br>
+      用它安静的动作，为你调一杯恰好的酒。
+    </p>
+    <div class="enter-wrap" style="margin-top:44px">
+      <button class="btn-enter" id="btn-enter">推门入座</button>
+    </div>
+  </div>
+  <div class="welcome-foot">
+    <span><i class="live-dot"></i>正在营业</span>
+    <span>吧台 · 六席</span>
+    <span>今夜 · 六款经典</span>
+  </div>
+</section>
+
+<!-- ======================================================================
+     二、点单页
+     ====================================================================== -->
+<section class="page" id="page-order">
+  <header class="order-head">
+    <div class="brand"><b>琥珀酒馆</b><i>AMBER TAVERN</i></div>
+    <div class="head-right"><i class="live-dot"></i>营业中 · 凌晨两点打烊</div>
+  </header>
+
+  <div class="menu-intro">
+    <div class="kicker">THE MENU</div>
+    <h2>今夜酒单</h2>
+    <p>六款经典 · 由机械臂按配方依次倾注</p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="order-foot">
+    点击酒款查看详情 · 每一杯约需 25 秒<br>
+    酒精度数仅供参考，请适量饮用
+  </div>
+</section>
+
+<!-- ======================================================================
+     三、制作页
+     ====================================================================== -->
+<section class="page" id="page-make">
+  <header class="make-head">
+    <div class="brand"><b>正在调制</b><i id="make-en">WHISKEY SOUR</i></div>
+    <div class="make-progress">
+      <button class="abort" id="btn-abort">中止</button>
+      <div class="pbar"><i id="pbar"></i></div>
+      <div class="pct" id="pct">0%</div>
+    </div>
+  </header>
+
+  <div class="make-grid">
+    <aside class="col-left" id="make-left"></aside>
+    <main class="col-mid">
+      <div class="scene-box">
+        <svg id="scene" viewBox="0 0 640 460" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="scene-caption" id="scene-caption">准备开始</div>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </main>
+    <aside class="col-right" id="make-right">
+      <div class="voice-head">
+        <div class="orb listening" id="orb">
+          <div class="ring"></div><div class="ring r2"></div><span>🎙</span>
+        </div>
+        <div class="voice-state" id="voice-state">聆听中</div>
+        <div class="voice-sub" id="voice-sub">离线演示 · ESP32 未接入</div>
+        <div class="wave" id="wave"></div>
+      </div>
+      <div class="chat" id="chat"></div>
+      <div class="quick" id="quick"></div>
+      <div class="mic-row">
+        <button class="mic" id="mic">🎤</button>
+        <div class="mode" id="mode-text">不需要联网：所有环节都在本页面内完成</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ======================================================================
+     四、完成页
+     ====================================================================== -->
+<section class="page" id="page-done">
+  <div class="done-wrap">
+    <div class="done-art" id="done-art"></div>
+    <div class="kicker">SERVED</div>
+    <h2 class="done-title" id="done-title">出餐完成</h2>
+    <p class="done-sub" id="done-sub">请到吧台取杯</p>
+    <div class="done-line"></div>
+    <div class="done-voice" id="done-voice"></div>
+    <div class="done-actions">
+      <button class="btn btn-line" id="btn-again">再来一杯</button>
+      <button class="btn btn-gold" id="btn-leave">离开酒馆</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     弹窗：酒款详情
+     ====================================================================== -->
+<div class="modal" id="modal-detail">
+  <div class="modal-card detail-card">
+    <button class="close" data-close="modal-detail">✕</button>
+    <div class="detail-left" id="detail-art"></div>
+    <div class="detail-right">
+      <div class="kicker">SIGNATURE</div>
+      <h2 id="detail-name"></h2>
+      <div class="en" id="detail-en"></div>
+      <p class="story" id="detail-story"></p>
+      <div class="specs" id="detail-specs"></div>
+      <ul class="ing" id="detail-ing"></ul>
+      <div class="detail-pay">
+        <div class="price-big"><small>¥</small><span id="detail-price">0</span></div>
+        <button class="btn btn-gold" id="btn-pay">支付并开始调制</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================================================
+     弹窗：扫码支付
+     ====================================================================== -->
+<div class="modal" id="modal-pay">
+  <div class="modal-card pay-card">
+    <button class="close" data-close="modal-pay">✕</button>
+    <div class="pay-head">
+      <div>
+        <div class="kicker">CHECKOUT</div>
+        <h3>请扫码支付</h3>
+      </div>
+      <div class="amount"><small>¥</small><span id="pay-amount">0</span></div>
+    </div>
+
+    <div class="pay-tabs">
+      <button class="tab active" data-method="wechat">微信支付</button>
+      <button class="tab" data-method="alipay">支付宝</button>
+    </div>
+
+    <div class="qr-wrap">
+      <div class="qr show" id="qr-wechat">
+        <div class="qr-box" id="qrbox-wechat"></div>
+        <div class="qr-brand"><i class="qr-dot" style="background:#07C160"></i>微信扫码支付</div>
+      </div>
+      <div class="qr" id="qr-alipay">
+        <div class="qr-box" id="qrbox-alipay"></div>
+        <div class="qr-brand"><i class="qr-dot" style="background:#1677FF"></i>支付宝扫码支付</div>
+      </div>
+    </div>
+
+    <p class="pay-tip">请使用手机 App 扫描上方二维码<br>二维码 5 分钟内有效，支付后自动通知机械臂</p>
+
+    <div class="pay-demo">
+      <span>演示模式：当前没有接入真实收款通道</span>
+      <button class="btn btn-gold" id="btn-paid">我已完成支付</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   琥珀酒馆 · 单文件网页
+   --------------------------------------------------------------------------
+   整个页面不依赖服务器、不依赖网络、不依赖任何图片文件：
+   双击 index.html 就能用，拔掉网线也能用。
+   所有插画都是现场用 SVG 画出来的。
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- 工具函数 */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function hex2rgb(h) {
+  h = h.replace('#', '');
+  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+function mix(a, b, t) {
+  const A = hex2rgb(a), B = hex2rgb(b);
+  const c = A.map((v, i) => Math.round(v + (B[i] - v) * t));
+  return '#' + c.map((v) => v.toString(16).padStart(2, '0')).join('');
+}
+const lighten = (h, t) => mix(h, '#ffffff', t);
+const darken  = (h, t) => mix(h, '#000000', t);
+
+/* ---------------------------------------------------------------- 酒款数据 */
+/* glass: 杯型  liquid: 酒液颜色  glow: 环境光颜色  garnish: 装饰 */
+const COCKTAILS = [
+  {
+    id: 'whiskey-sour', name: '威士忌酸', en: 'Whiskey Sour', price: 38, abv: 18,
+    glass: 'rocks', vol: '120 ml', glassName: '古典杯', base: '波本威士忌',
+    tagline: '酸与甜的黄金比例',
+    liquid: '#c9893d', glow: '#d99a3a', garnish: 'lemon', ice: true,
+    story: '十九世纪的水手把柠檬汁掺进威士忌，又添一勺糖浆安抚酸涩——于是有了这杯最柔和的经典。波本的香草与焦糖先到，柠檬的亮酸随后追上来，最后一点甜收尾。',
+    notes: ['波本的香草与焦糖', '鲜榨柠檬的明亮酸度', '一勺糖浆把两者缝合'],
+    ingredients: [['波本威士忌', 45, '#c8802f'], ['鲜榨柠檬汁', 20, '#f2d06b'], ['糖浆', 15, '#e0a94f']]
+  },
+  {
+    id: 'gin-tonic', name: '金汤力', en: 'Gin & Tonic', price: 32, abv: 10,
+    glass: 'highball', vol: '165 ml', glassName: '高球杯', base: '金酒',
+    tagline: '气泡最细的一杯',
+    liquid: '#cfe0ea', glow: '#9fc6d8', garnish: 'lime', ice: true,
+    story: '金酒的杜松子与汤力水的奎宁苦味，是夏天最利落的一对。冰先入杯，酒液沿着冰壁滑下去，气泡被压得很细，喝到最后一口都还是凉的。',
+    notes: ['杜松子与柑橘皮的香气', '奎宁带来的干净微苦', '大量冰块让气泡更细'],
+    ingredients: [['金酒', 45, '#dfe9f2'], ['汤力水', 120, '#eaf6ff']]
+  },
+  {
+    id: 'mojito', name: '莫吉托', en: 'Mojito', price: 36, abv: 12,
+    glass: 'highball', vol: '160 ml', glassName: '高球杯', base: '白朗姆',
+    tagline: '薄荷、青柠与海明威',
+    liquid: '#cfe3b0', glow: '#8fbf6a', garnish: 'mint', ice: true,
+    story: '薄荷、青柠、白朗姆与苏打，四层依次注入。海明威在哈瓦那的酒吧里一天能喝上好几杯——他说这杯酒让他觉得自己还年轻。',
+    notes: ['薄荷叶被冰压出的清凉', '青柠的酸与皮油的微苦', '苏打水把一切拉长'],
+    ingredients: [['白朗姆', 45, '#eef3ef'], ['青柠汁', 20, '#b9d94a'], ['糖浆', 15, '#e8c96a'], ['苏打水', 80, '#dff2f7']]
+  },
+  {
+    id: 'old-fashioned', name: '古典', en: 'Old Fashioned', price: 42, abv: 32,
+    glass: 'rocks', vol: '90 ml', glassName: '古典杯', base: '波本威士忌',
+    tagline: '越简单，越藏不住手艺',
+    liquid: '#a5601f', glow: '#c27a2a', garnish: 'orange', ice: true,
+    story: '糖、苦精、波本，只加一颗大冰球。配方简单到没有地方可以躲——温度、比例、搅拌的时间，全都写在味道里。这是一杯需要安静的酒。',
+    notes: ['苦精在杯底被碾开', '大冰球让稀释变慢', '橙皮的油点在杯口爆开'],
+    ingredients: [['波本威士忌', 60, '#a5601f'], ['糖浆', 10, '#e0a94f'], ['苦精', 3, '#7a3413']]
+  },
+  {
+    id: 'negroni', name: '尼格罗尼', en: 'Negroni', price: 40, abv: 24,
+    glass: 'rocks', vol: '100 ml', glassName: '古典杯', base: '金酒',
+    tagline: '苦得很有教养',
+    liquid: '#8e2b2b', glow: '#b03a3a', garnish: 'orange', ice: true,
+    story: '金酒、金巴利、味美思，一比一比一。深红的一杯，第一口是苦的，第二口开始回甘。据说它诞生于佛罗伦萨，伯爵嫌美国人不够烈，于是把苏打换成了金酒。',
+    notes: ['金巴利的草药苦味', '味美思的甜把苦托住', '橙皮油浮在最上层'],
+    ingredients: [['金酒', 30, '#eef3ef'], ['金巴利', 30, '#8e2b2b'], ['甜味美思', 30, '#7a2b1f']]
+  },
+  {
+    id: 'margarita', name: '玛格丽特', en: 'Margarita', price: 36, abv: 22,
+    glass: 'coupe', vol: '110 ml', glassName: '香槟杯', base: '龙舌兰',
+    tagline: '杯口那一圈盐',
+    liquid: '#f0e2a8', glow: '#d8c46a', garnish: 'salt', ice: false,
+    story: '龙舌兰、橙皮利口酒、青柠，杯口抹一圈盐。咸、酸、烈，三种感觉一起抵达——据说这杯酒是调酒师为纪念一位姑娘而调，所以连杯子都用了最轻的那种。',
+    notes: ['龙舌兰的植物气息', '橙皮利口酒的圆润', '杯口海盐把酸度点亮'],
+    ingredients: [['龙舌兰', 50, '#eef3ef'], ['橙皮利口酒', 25, '#f0a94b'], ['青柠汁', 25, '#b9d94a']]
+  }
+];
+
+/* ---------------------------------------------------------------- 杯型定义 */
+/* 坐标都在 400×500 的画布里，杯子居中 x=200 */
+const GLASS = {
+  rocks: {
+    outer: 'M128,214 L146,392 Q148,404 162,404 L238,404 Q252,404 254,392 L272,214',
+    inner: 'M136,220 L152,390 Q153,398 163,398 L237,398 Q247,398 248,390 L264,220 Z',
+    rimY: 214, rimRx: 72, rimRy: 11,
+    level: 286, surfaceRx: 64, surfaceRy: 8,
+    bottom: 398, tableY: 430, footY: 404, shadowRx: 74,
+    shine: 'M152,238 C149,300 153,350 160,388',
+    stem: ''
+  },
+  highball: {
+    outer: 'M152,152 L160,414 Q161,424 170,424 L230,424 Q239,424 240,414 L248,152',
+    inner: 'M158,158 L165,412 Q166,419 172,419 L228,419 Q234,419 235,412 L242,158 Z',
+    rimY: 152, rimRx: 48, rimRy: 9,
+    level: 232, surfaceRx: 45, surfaceRy: 7,
+    bottom: 419, tableY: 432, footY: 424, shadowRx: 54,
+    shine: 'M168,180 C165,260 167,340 171,408',
+    stem: ''
+  },
+  coupe: {
+    outer: 'M116,196 C116,262 156,300 200,300 C244,300 284,262 284,196',
+    inner: 'M124,202 C124,258 160,292 200,292 C240,292 276,258 276,202 Z',
+    rimY: 196, rimRx: 84, rimRy: 13,
+    level: 244, surfaceRx: 58, surfaceRy: 9,
+    bottom: 292, tableY: 430, footY: 424, shadowRx: 54,
+    shine: 'M146,214 C146,252 162,276 182,286',
+    stem: '<rect x="194" y="300" width="12" height="118" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.28)" stroke-width="1.4"/>'
+        + '<ellipse cx="200" cy="424" rx="52" ry="10" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.30)" stroke-width="1.4"/>'
+  }
+};
+
+/* ---------------------------------------------------------------- 冰块 */
+function iceSVG(type) {
+  const spots = type === 'highball'
+    ? [[186, 300, -8], [214, 330, 10], [188, 362, 4], [212, 392, -6]]
+    : [[186, 322, 12], [222, 346, -10]];
+  return spots.map(([x, y, rot]) => `
+    <g transform="translate(${x},${y}) rotate(${rot})">
+      <rect x="-20" y="-20" width="40" height="40" rx="7"
+            fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.32)" stroke-width="1.2"/>
+      <path d="M-13,-13 L7,-13" stroke="rgba(255,255,255,.30)" stroke-width="2" stroke-linecap="round"/>
+    </g>`).join('');
+}
+
+/* ---------------------------------------------------------------- 装饰 */
+function garnishSVG(kind, G) {
+  const cx = 200, rimY = G.rimY, rx = G.rimRx;
+
+  if (kind === 'lemon') {
+    const spokes = Array.from({ length: 8 }, (_, i) => {
+      const a = (i * Math.PI) / 4;
+      return `<line x1="0" y1="0" x2="${(15 * Math.cos(a)).toFixed(1)}" y2="${(15 * Math.sin(a)).toFixed(1)}"
+                    stroke="#eed07a" stroke-width="1.3"/>`;
+    }).join('');
+    return `<g transform="translate(${cx + rx - 4},${rimY + 6})">
+      <circle r="22" fill="#f4dc90" stroke="#dfb63c" stroke-width="5"/>
+      <circle r="16" fill="#faeec2"/>
+      ${spokes}
+      <circle r="19" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+    </g>`;
+  }
+
+  if (kind === 'lime') {
+    return `<g transform="translate(${cx + rx - 6},${rimY + 4}) rotate(-16)">
+      <path d="M0,0 L36,-12 A38,38 0 0 1 36,26 Z" fill="#a8d24a" stroke="#7cae2a" stroke-width="2"/>
+      <path d="M3,0 L32,4" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M3,0 L34,-8" stroke="rgba(255,255,255,.35)" stroke-width="1.2" stroke-linecap="round"/>
+    </g>`;
+  }
+
+  if (kind === 'mint') {
+    const leaf = (x, y, r, rot) =>
+      `<ellipse cx="${x}" cy="${y}" rx="7" ry="15" transform="rotate(${rot} ${x} ${y})"
+                fill="#5d9440" stroke="#3f6d2a" stroke-width=".8"/>`;
+    return `<g transform="translate(${cx - 6},${rimY - 4})">
+      <path d="M0,44 C2,14 6,-6 12,-22" stroke="#4f7a35" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      ${leaf(12, -26, 0, 16)}
+      ${leaf(2, -14, 0, -34)}
+      ${leaf(20, -12, 0, 52)}
+      ${leaf(-2, -2, 0, -58)}
+      ${leaf(18, 2, 0, 30)}
+      ${leaf(6, 18, 0, -20)}
+    </g>`;
+  }
+
+  if (kind === 'orange') {
+    return `<g transform="translate(${cx + rx - 10},${rimY + 10}) rotate(-12)">
+      <path d="M0,0 C24,-18 46,2 34,20 C24,36 4,28 4,12" fill="none"
+            stroke="#e0882a" stroke-width="6" stroke-linecap="round"/>
+      <path d="M0,0 C24,-18 46,2 34,20 C24,36 4,28 4,12" fill="none"
+            stroke="rgba(255,220,150,.55)" stroke-width="1.6" stroke-linecap="round"/>
+    </g>`;
+  }
+
+  if (kind === 'salt') {
+    return `<ellipse cx="${cx}" cy="${rimY}" rx="${rx + 2}" ry="${G.rimRy + 2}"
+              fill="none" stroke="rgba(255,255,255,.62)" stroke-width="3"
+              stroke-dasharray="1 3.5" stroke-linecap="round"/>`;
+  }
+  return '';
+}
+
+/* ---------------------------------------------------------------- 酒款插画 */
+/* uid 用来给同一杯酒在不同位置（卡片 / 详情 / 制作页 / 完成页）生成互不冲突的渐变 id，
+   否则浏览器只会认第一份，后画的那些杯子就变成空杯了 */
+function artSVG(c, uid) {
+  const u = 'k' + c.id.replace(/[^a-z0-9]/g, '') + (uid ? '-' + uid : '');
+  const G = GLASS[c.glass];
+  const liq = c.liquid;
+
+  return `<svg viewBox="0 30 400 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <radialGradient id="${u}-bg" cx="50%" cy="48%" r="72%">
+      <stop offset="0" stop-color="#100c08"/>
+      <stop offset=".66" stop-color="#0a0705"/>
+      <stop offset="1" stop-color="#080605" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="${u}-glow" cx="50%" cy="46%" r="52%">
+      <stop offset="0" stop-color="${c.glow}" stop-opacity=".50"/>
+      <stop offset=".55" stop-color="${c.glow}" stop-opacity=".14"/>
+      <stop offset="1" stop-color="${c.glow}" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="${u}-liq" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${lighten(liq, .36)}"/>
+      <stop offset=".38" stop-color="${liq}"/>
+      <stop offset="1" stop-color="${darken(liq, .38)}"/>
+    </linearGradient>
+    <linearGradient id="${u}-glass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity=".20"/>
+      <stop offset=".16" stop-color="#fff" stop-opacity=".035"/>
+      <stop offset=".84" stop-color="#fff" stop-opacity=".02"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".14"/>
+    </linearGradient>
+    <linearGradient id="${u}-table" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1a1209" stop-opacity="0"/>
+      <stop offset=".28" stop-color="#241a10" stop-opacity=".9"/>
+      <stop offset=".72" stop-color="#241a10" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#1a1209" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="${u}-clip"><path d="${G.inner}"/></clipPath>
+  </defs>
+
+  
+  <ellipse cx="200" cy="240" rx="186" ry="182" fill="url(#${u}-glow)"/>
+  <circle cx="200" cy="252" r="156" fill="none" stroke="rgba(201,162,39,.10)"/>
+  <circle cx="200" cy="252" r="196" fill="none" stroke="rgba(201,162,39,.055)"/>
+
+  <rect y="${G.tableY}" width="400" height="${500 - G.tableY}" fill="url(#${u}-table)"/>
+
+  <ellipse cx="200" cy="${G.footY + 3}" rx="${G.shadowRx}" ry="9" fill="#000" opacity=".55"/>
+  ${G.stem}
+  <path d="${G.outer}" fill="url(#${u}-glass)" stroke="rgba(255,255,255,.34)" stroke-width="1.8"/>
+  <g clip-path="url(#${u}-clip)">
+    <rect x="100" y="${G.level}" width="200" height="${G.bottom - G.level + 16}" fill="url(#${u}-liq)"/>
+    ${c.ice ? iceSVG(c.glass) : ''}
+  </g>
+  <ellipse cx="200" cy="${G.level}" rx="${G.surfaceRx}" ry="${G.surfaceRy}"
+           fill="${lighten(liq, .45)}" opacity=".30"/>
+  <ellipse cx="200" cy="${G.level}" rx="${G.surfaceRx}" ry="${G.surfaceRy}"
+           fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1"/>
+  <ellipse cx="200" cy="${G.rimY}" rx="${G.rimRx}" ry="${G.rimRy}"
+           fill="none" stroke="rgba(255,255,255,.52)" stroke-width="2"/>
+  <ellipse cx="200" cy="${G.rimY}" rx="${G.rimRx - 5}" ry="${G.rimRy - 1.5}"
+           fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+  <path d="${G.shine}" fill="none" stroke="rgba(255,255,255,.30)" stroke-width="3" stroke-linecap="round"/>
+  ${garnishSVG(c.garnish, G)}
+</svg>`;
+}
+
+/* ---------------------------------------------------------------- 酒馆背景 */
+function tavernBG() {
+  let seed = 20260714;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+
+  let shelves = '';
+  const shelfYs = [612, 754];
+  shelfYs.forEach((sy, si) => {
+    let x = 40;
+    let group = '';
+    while (x < 1580) {
+      const w = 24 + rnd() * 24;
+      const h = 82 + rnd() * 62;
+      const gap = 14 + rnd() * 34;
+      const neck = w * 0.34;
+      group += `<g opacity="${(0.30 + rnd() * 0.30).toFixed(2)}">
+        <rect x="${x.toFixed(1)}" y="${(sy - h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}"
+              rx="${(w * 0.32).toFixed(1)}" fill="url(#bg-bottle)"/>
+        <rect x="${(x + (w - neck) / 2).toFixed(1)}" y="${(sy - h - 22).toFixed(1)}"
+              width="${neck.toFixed(1)}" height="28" rx="4" fill="url(#bg-bottle)"/>
+        <rect x="${(x + w * 0.18).toFixed(1)}" y="${(sy - h * 0.62).toFixed(1)}"
+              width="${(w * 0.2).toFixed(1)}" height="${(h * 0.34).toFixed(1)}"
+              rx="3" fill="rgba(255,255,255,.06)"/>
+        <rect x="${(x + w * 0.12).toFixed(1)}" y="${(sy - h * 0.30).toFixed(1)}"
+              width="${(w * 0.76).toFixed(1)}" height="${(h * 0.16).toFixed(1)}"
+              rx="2" fill="rgba(201,162,39,.10)"/>
+      </g>`;
+      x += w + gap;
+    }
+    shelves += `<g>${group}
+      <rect x="0" y="${sy}" width="1600" height="11" fill="#150e08"/>
+      <rect x="0" y="${sy}" width="1600" height="2" fill="rgba(201,162,39,.16)"/>
+    </g>`;
+  });
+
+  const lamp = (x) => `<g>
+      <rect x="${x - 1.5}" y="0" width="3" height="118" fill="#2a1d10"/>
+      <path d="M${x - 34},118 L${x + 34},118 L${x + 20},156 L${x - 20},156 Z" fill="#33240f"/>
+      <ellipse cx="${x}" cy="158" rx="19" ry="6" fill="#ffd28a" opacity=".95"/>
+      <ellipse cx="${x}" cy="210" rx="230" ry="160" fill="url(#bg-lamp)"/>
+    </g>`;
+
+  return `<svg class="tavern-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="bg-wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a120b"/><stop offset=".62" stop-color="#0d0906"/><stop offset="1" stop-color="#050403"/>
+    </linearGradient>
+    <linearGradient id="bg-bottle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#221809"/><stop offset=".42" stop-color="#4a3519"/><stop offset="1" stop-color="#120c06"/>
+    </linearGradient>
+    <radialGradient id="bg-lamp">
+      <stop offset="0" stop-color="#ffcf87" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#ffcf87" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg-scrim" cx="50%" cy="46%" r="50%">
+      <stop offset="0" stop-color="#070504" stop-opacity=".95"/>
+      <stop offset=".45" stop-color="#070504" stop-opacity=".80"/>
+      <stop offset="1" stop-color="#070504" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bg-soft" x="-6%" y="-6%" width="112%" height="112%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <radialGradient id="bg-haze" cx="50%" cy="58%" r="60%">
+      <stop offset="0" stop-color="#c9a227" stop-opacity=".13"/>
+      <stop offset="1" stop-color="#c9a227" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bg-counter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1309"/><stop offset=".18" stop-color="#130d08"/><stop offset="1" stop-color="#070504"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg-wall)"/>
+  <ellipse cx="800" cy="520" rx="900" ry="520" fill="url(#bg-haze)"/>
+
+  ${lamp(300)}${lamp(800)}${lamp(1300)}
+  <g filter="url(#bg-soft)">${shelves}</g>
+  <rect width="1600" height="900" fill="url(#bg-scrim)"/>
+
+  <rect x="0" y="826" width="1600" height="74" fill="url(#bg-counter)"/>
+  <rect x="0" y="826" width="1600" height="2.5" fill="rgba(201,162,39,.30)"/>
+  <rect x="0" y="828" width="1600" height="1" fill="rgba(255,255,255,.10)"/>
+</svg>`;
+}
+
+/* ---------------------------------------------------------------- 二维码图形 */
+/* 演示用的「像二维码」的图案：有定位角、有时序线，但不是真实可扫的编码 */
+function qrSVG(seedStr, color) {
+  const N = 25;
+  let s = 0;
+  for (let i = 0; i < seedStr.length; i++) s = (s * 31 + seedStr.charCodeAt(i)) & 0x7fffffff;
+  const rnd = () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; };
+
+  const isFinder = (x, y) =>
+    (x < 7 && y < 7) || (x > N - 8 && y < 7) || (x < 7 && y > N - 8);
+
+  let cells = '';
+  for (let y = 0; y < N; y++) {
+    for (let x = 0; x < N; x++) {
+      if (isFinder(x, y)) continue;
+      if (y === 6 || x === 6) {                       // 时序线
+        if ((x + y) % 2 === 0) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+        continue;
+      }
+      if (rnd() > 0.52) cells += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+    }
+  }
+
+  const finder = (x, y) =>
+    `<rect x="${x}" y="${y}" width="7" height="7"/>
+     <rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/>
+     <rect x="${x + 2}" y="${y + 2}" width="3" height="3"/>`;
+
+  return `<svg viewBox="-2 -2 ${N + 4} ${N + 4}">
+    <rect x="-2" y="-2" width="${N + 4}" height="${N + 4}" fill="#fff"/>
+    <g fill="${color}">${cells}${finder(0, 0)}${finder(N - 7, 0)}${finder(0, N - 7)}</g>
+  </svg>`;
+}
+
+/* ==========================================================================
+   一、页面路由
+   ========================================================================== */
+
+const state = {
+  page: 'welcome',    // 当前页面
+  current: null,      // 当前这杯酒（数据对象）
+  runId: 0,           // 每次开始调制 +1，用来丢弃上一轮残留的动画
+  muted: false
+};
+
+function go(name) {
+  $$('.page').forEach((p) => p.classList.toggle('active', p.id === 'page-' + name));
+  const el = document.getElementById('page-' + name);
+  if (el) el.scrollTop = 0;
+  state.page = name;
+  if (name === 'done' && typeof onEnterDone === 'function') onEnterDone();
+}
+
+/* ==========================================================================
+   二、点单页
+   ========================================================================== */
+
+function renderGrid() {
+  $('#grid').innerHTML = COCKTAILS.map((c) => `
+    <article class="card" data-id="${c.id}">
+      <div class="card-art">
+        ${artSVG(c, 'card')}
+        <div class="abv"><b>${c.abv}%</b><small>VOL</small></div>
+      </div>
+      <div class="card-body">
+        <h3>${c.name}</h3>
+        <div class="en">${c.en}</div>
+        <div class="card-foot">
+          <span class="tagline">${c.tagline}</span>
+          <span class="card-price"><small>¥</small>${c.price}</span>
+        </div>
+      </div>
+    </article>`).join('');
+}
+
+/* ==========================================================================
+   三、弹窗
+   ========================================================================== */
+
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function bindModals() {
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-close]');
+    if (btn) closeModal(btn.dataset.close);
+  });
+  $$('.modal').forEach((m) => {
+    m.addEventListener('click', (e) => { if (e.target === m) closeModal(m.id); });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') $$('.modal.open').forEach((m) => closeModal(m.id));
+  });
+}
+
+/* ---------------------------------------------------------- 酒款详情弹窗 */
+let detailTarget = null;
+
+function openDetail(c) {
+  detailTarget = c;
+  $('#detail-art').innerHTML = artSVG(c, 'detail');
+  $('#detail-name').textContent = c.name;
+  $('#detail-en').textContent = c.en;
+  $('#detail-story').textContent = c.story;
+  $('#detail-price').textContent = c.price;
+
+  $('#detail-specs').innerHTML = `
+    <div class="spec"><b>${c.abv}%</b><span>酒精度</span></div>
+    <div class="spec"><b>${c.vol}</b><span>容量</span></div>
+    <div class="spec"><b>${c.glassName}</b><span>杯型</span></div>`;
+
+  $('#detail-ing').innerHTML = c.ingredients.map(([n, ml, col]) => `
+    <li><i style="background:${col}"></i>${n}<em>${ml} ml</em></li>`).join('');
+
+  openModal('modal-detail');
+}
+
+/* ---------------------------------------------------------- 扫码支付弹窗 */
+let activeMethod = 'wechat';
+
+function openPay(c) {
+  state.current = c;
+  $('#pay-amount').textContent = c.price;
+
+  // 演示二维码：图案是程序画的，不是真实可扫的收款码
+  $('#qrbox-wechat').innerHTML = qrSVG('wechat-' + c.id, '#141414');
+  $('#qrbox-alipay').innerHTML = qrSVG('alipay-' + c.id, '#141414');
+  switchMethod('wechat');
+  openModal('modal-pay');
+}
+
+function switchMethod(m) {
+  activeMethod = m;
+  $$('.tab').forEach((t) => t.classList.toggle('active', t.dataset.method === m));
+  $$('.qr').forEach((q) => q.classList.toggle('show', q.id === 'qr-' + m));
+}
+
+/* ==========================================================================
+   四、支付完成 → 开始调制
+   ========================================================================== */
+
+async function confirmPaid() {
+  const btn = $('#btn-paid');
+  if (btn.disabled) return;
+
+  btn.disabled = true;
+  btn.textContent = '支付成功 ✓';
+  await sleep(500);
+
+  closeModal('modal-pay');
+  closeModal('modal-detail');
+
+  btn.textContent = '正在通知机械臂…';
+  await sleep(500);
+
+  btn.disabled = false;
+  btn.textContent = '我已完成支付';
+
+  startSession(state.current);
+}
+
+/* ==========================================================================
+   五、制作页 —— 中间的机械臂动画
+   --------------------------------------------------------------------------
+   动画的原理和真机一样：给手腕一个「目标点」，每一帧朝目标挪一点，
+   看起来就是平滑运动。真机换的是关节角度，这里换的是坐标，思路一致。
+   ========================================================================== */
+
+const POSE = {
+  rest: { x: 520, y: 262, rot: 0 },     // 回到瓶位，瓶底刚好落在台面上
+  lift: { x: 520, y: 170, rot: 0 },     // 抬起
+  over: { x: 250, y: 190, rot: 0 },     // 移到杯口上方
+  pour: { x: 250, y: 190, rot: 118 }    // 倾斜
+};
+
+const S = {
+  cur: { x: 520, y: 262, rot: 0 },
+  tgt: { x: 520, y: 262, rot: 0 },
+  pouring: false,
+  surfaceY: 374,
+  liqColor: '#e8b464',
+  running: false
+};
+
+function buildScene() {
+  $('#scene').innerHTML = `
+  <defs>
+    <linearGradient id="sc-counter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b1f13"/><stop offset="1" stop-color="#0a0705"/>
+    </linearGradient>
+    <linearGradient id="sc-glass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
+      <stop offset=".18" stop-color="#fff" stop-opacity=".04"/>
+      <stop offset=".84" stop-color="#fff" stop-opacity=".03"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".16"/>
+    </linearGradient>
+    <linearGradient id="sc-bottle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a5a24"/><stop offset=".38" stop-color="#cf9f42"/>
+      <stop offset=".74" stop-color="#8a6425"/><stop offset="1" stop-color="#37260c"/>
+    </linearGradient>
+    <radialGradient id="sc-spot" cx="42%" cy="28%" r="72%">
+      <stop offset="0" stop-color="#c9a227" stop-opacity=".17"/>
+      <stop offset="1" stop-color="#c9a227" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="sc-clip">
+      <path d="M198,206 L210,368 Q211,374 217,374 L283,374 Q289,374 290,368 L302,206 Z"/>
+    </clipPath>
+  </defs>
+
+  <rect width="640" height="460" fill="#0a0806"/>
+  <ellipse cx="280" cy="170" rx="310" ry="230" fill="url(#sc-spot)"/>
+  <circle cx="250" cy="250" r="152" fill="none" stroke="rgba(201,162,39,.08)"/>
+  <circle cx="250" cy="250" r="196" fill="none" stroke="rgba(201,162,39,.045)"/>
+
+  <rect y="380" width="640" height="80" fill="url(#sc-counter)"/>
+  <line x1="0" y1="380" x2="640" y2="380" stroke="rgba(201,162,39,.28)" stroke-width="1"/>
+
+  <ellipse cx="250" cy="386" rx="66" ry="8" fill="#000" opacity=".5"/>
+  <path d="M190,200 L204,372 Q205,380 214,380 L286,380 Q295,380 296,372 L310,200"
+        fill="url(#sc-glass)" stroke="rgba(255,255,255,.34)" stroke-width="1.8"/>
+  <g clip-path="url(#sc-clip)"><g id="s-liquid"></g></g>
+  <ellipse id="s-surface" cx="250" cy="374" rx="52" ry="7" fill="rgba(255,255,255,.28)" opacity="0"/>
+  <ellipse cx="250" cy="200" rx="60" ry="10" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
+
+  <text x="520" y="412" text-anchor="middle" font-size="11" fill="#5d5446" letter-spacing="3">瓶位</text>
+  <text x="250" y="412" text-anchor="middle" font-size="11" fill="#5d5446" letter-spacing="3">杯位</text>
+
+  <rect id="s-stream" x="247" y="240" width="6" height="0" rx="3" fill="#e8b464" opacity="0"/>
+
+  <path id="s-arm2" d="" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="7"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <path id="s-arm" d="" fill="none" stroke="rgba(146,140,172,.92)" stroke-width="15"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="590" cy="378" r="26" fill="#221c2e" stroke="#3c3450" stroke-width="2"/>
+  <circle cx="590" cy="378" r="7" fill="#c9a227"/>
+
+  <g id="s-hand">
+    <g id="s-grip" stroke="#cfc9e2" stroke-width="4" stroke-linecap="round" fill="none">
+      <path d="M-15,-3 L-15,17"/><path d="M15,-3 L15,17"/>
+    </g>
+    <g id="s-bottle">
+      <path d="M-7,-8 L7,-8 L7,30 L26,48 L26,112 Q26,118 20,118 L-20,118 Q-26,118 -26,112 L-26,48 L-7,30 Z"
+            fill="url(#sc-bottle)" stroke="rgba(255,255,255,.34)" stroke-width="1.2"/>
+      <rect x="-9" y="-13" width="18" height="10" rx="2" fill="#d8cbb0"/>
+      <rect x="-18" y="60" width="36" height="26" rx="3" fill="rgba(250,244,232,.92)"/>
+      <text x="0" y="78" text-anchor="middle" font-size="10" fill="#3a2c14"
+            id="s-label" font-family="Georgia,serif">酒</text>
+    </g>
+  </g>`;
+  paintArm();
+}
+
+function paintArm() {
+  $('#s-hand').setAttribute('transform',
+    `translate(${S.cur.x.toFixed(1)},${S.cur.y.toFixed(1)})`);
+  $('#s-bottle').setAttribute('transform', `rotate(${S.cur.rot.toFixed(1)})`);
+
+  const b = { x: 590, y: 378 };
+  const dx = S.cur.x - b.x, dy = S.cur.y - b.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const mx = (b.x + S.cur.x) / 2, my = (b.y + S.cur.y) / 2;
+  let nx = -dy / len, ny = dx / len;
+  if (ny > 0) { nx = -nx; ny = -ny; }          // 肘部永远朝上，看起来才像弯着的手臂
+  const off = Math.min(80, len * 0.36);
+  const ex = mx + nx * off, ey = my + ny * off;
+  const d = `M ${b.x},${b.y} L ${ex.toFixed(1)},${ey.toFixed(1)} L ${S.cur.x.toFixed(1)},${S.cur.y.toFixed(1)}`;
+  $('#s-arm').setAttribute('d', d);
+  $('#s-arm2').setAttribute('d', d);
+
+  const st = $('#s-stream');
+  if (S.pouring) {
+    const top = S.cur.y + 6;
+    st.setAttribute('x', (S.cur.x - 3).toFixed(1));
+    st.setAttribute('y', top.toFixed(1));
+    st.setAttribute('height', Math.max(0, S.surfaceY - top).toFixed(1));
+    st.setAttribute('fill', S.liqColor);
+    st.setAttribute('opacity', '.85');
+  } else {
+    st.setAttribute('opacity', '0');
+  }
+}
+
+function loopScene() {
+  if (!S.running) return;
+  S.cur.x += (S.tgt.x - S.cur.x) * 0.085;
+  S.cur.y += (S.tgt.y - S.cur.y) * 0.085;
+  S.cur.rot += (S.tgt.rot - S.cur.rot) * 0.085;
+  paintArm();
+  requestAnimationFrame(loopScene);
+}
+
+function setPose(name, color) {
+  const p = POSE[name];
+  S.tgt.x = p.x; S.tgt.y = p.y; S.tgt.rot = p.rot;
+  S.pouring = name === 'pour';
+  if (color) S.liqColor = color;
+}
+
+/* ==========================================================================
+   六、制作流程
+   ========================================================================== */
+
+const SPEED = 1;                                  // 想更快就把这个改成 2
+const wait = (ms) => sleep(ms / SPEED);
+
+function buildMakeLeft(c) {
+  const totalMl = c.ingredients.reduce((a, s) => a + s[1], 0);
+  $('#make-en').textContent = c.en.toUpperCase();
+
+  $('#make-left').innerHTML = `
+    <div class="mix-card">
+      <div class="mix-art">${artSVG(c, 'mix')}</div>
+      <div class="mix-body">
+        <h3>${c.name}</h3>
+        <div class="en">${c.en}</div>
+        <div class="mix-specs">
+          <span>${c.abv}% VOL</span><span>${c.glassName}</span><span>${c.vol}</span>
+        </div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">本次配方 <b>${totalMl} ml</b></div>
+      <ul class="recipe" id="recipe">
+        ${c.ingredients.map(([n, ml, col], i) => `
+          <li data-i="${i}">
+            <i class="sw" style="background:${col}"></i>
+            <span class="nm">${n}</span>
+            <span class="ml">${ml} ml</span>
+          </li>`).join('')}
+      </ul>
+    </div>
+    <div class="block">
+      <div class="block-title">酒保手记</div>
+      <p class="note">${c.notes.join('，')}。</p>
+    </div>`;
+}
+
+function buildTimeline(c) {
+  $('#timeline').innerHTML = c.ingredients.map(([n, ml], i) => `
+    <div class="tl-item" data-i="${i}">
+      <div class="n">STEP ${String(i + 1).padStart(2, '0')}</div>
+      <div class="t">${n}</div>
+    </div>`).join('');
+}
+
+function markSteps(doneCount, activeIndex) {
+  $$('#recipe li').forEach((li, i) => {
+    li.classList.toggle('done', i < doneCount);
+    li.classList.toggle('on', i === activeIndex);
+  });
+  $$('#timeline .tl-item').forEach((el, i) => {
+    el.classList.toggle('done', i < doneCount);
+    el.classList.toggle('on', i === activeIndex);
+  });
+}
+
+function setProgress(p) {
+  const v = Math.max(0, Math.min(100, p));
+  $('#pbar').style.width = v.toFixed(1) + '%';
+  $('#pct').textContent = Math.round(v) + '%';
+}
+
+function renderLiquid(c, idx, poured) {
+  const totalMl = c.ingredients.reduce((a, s) => a + s[1], 0);
+  const H = 168, bottom = 374;
+  let acc = 0, html = '';
+
+  c.ingredients.forEach(([n, ml, col], i) => {
+    let frac = 0;
+    if (i < idx) frac = 1;
+    else if (i === idx) frac = Math.min(1, Math.max(0, poured) / ml);
+    if (frac <= 0) return;
+    const h = (ml / totalMl) * H * frac;
+    html += `<rect x="180" y="${(bottom - acc - h).toFixed(1)}" width="140"
+                   height="${(h + 0.6).toFixed(1)}" fill="${col}" opacity=".9"/>`;
+    acc += h;
+  });
+
+  $('#s-liquid').innerHTML = html;
+  S.surfaceY = bottom - acc;
+
+  const surf = $('#s-surface');
+  surf.setAttribute('cy', S.surfaceY.toFixed(1));
+  surf.setAttribute('opacity', acc > 0 ? '.3' : '0');
+}
+
+function startSession(c) {
+  state.current = c;
+  state.runId++;
+  const rid = state.runId;
+
+  buildMakeLeft(c);
+  buildTimeline(c);
+  resetScene();
+  clearChat();
+  setProgress(0);
+  markSteps(0, -1);
+  $('#scene-caption').textContent = '准备开始';
+  $('#s-label').textContent = '酒';
+  go('make');
+
+  runMaking(c, rid);
+}
+
+function resetScene() {
+  S.cur = { x: 520, y: 262, rot: 0 };
+  S.tgt = { x: 520, y: 262, rot: 0 };
+  S.pouring = false;
+  S.surfaceY = 374;
+  renderLiquid({ ingredients: [] }, 0, 0);
+  $('#s-liquid').innerHTML = '';
+  $('#s-surface').setAttribute('opacity', '0');
+  if (!S.running) { S.running = true; loopScene(); }
+  paintArm();
+}
+
+async function runMaking(c, rid) {
+  const totalMl = c.ingredients.reduce((a, s) => a + s[1], 0);
+  let doneMl = 0;
+
+  setOrb('listening');
+  say(`晚上好，今晚为您调一杯${c.name}。`, 2600);
+  await wait(1400);
+  if (rid !== state.runId) return;
+
+  for (let i = 0; i < c.ingredients.length; i++) {
+    const [name, ml, col] = c.ingredients[i];
+
+    // ---- 1. 移到瓶子上方 ----
+    markSteps(i, i);
+    $('#scene-caption').textContent = `正在取「${name}」`;
+    setPose('rest');
+    say(`正在取「${name}」，${ml} 毫升。`, 2200);
+    await wait(1100);
+    if (rid !== state.runId) return;
+
+    // ---- 2. 抬起 ----
+    setPose('lift');
+    $('#scene-caption').textContent = '夹紧，抬起';
+    $('#s-label').textContent = name.slice(0, 2);
+    await wait(850);
+    if (rid !== state.runId) return;
+
+    // ---- 3. 移到杯子上方 ----
+    setPose('over');
+    $('#scene-caption').textContent = '移向杯口';
+    await wait(1100);
+    if (rid !== state.runId) return;
+
+    // ---- 4. 倾斜倒酒 ----
+    setPose('pour', col);
+    $('#scene-caption').textContent = `倾注「${name}」`;
+    setOrb('speaking');
+
+    const dur = Math.max(1500, (ml / 12) * 1000) / SPEED;
+    const t0 = performance.now();
+
+    while (true) {
+      const k = Math.min(1, (performance.now() - t0) / dur);
+      const poured = ml * k;
+      renderLiquid(c, i, poured);
+      setProgress(((doneMl + poured) / totalMl) * 100);
+
+      if (k >= 1) break;
+      await sleep(60);
+      if (rid !== state.runId) return;
+    }
+
+    // ---- 5. 回正、放回 ----
+    setPose('lift');
+    S.pouring = false;
+    $('#scene-caption').textContent = '回正，让最后一滴落回去';
+    await wait(700);
+    if (rid !== state.runId) return;
+
+    setPose('rest');
+    $('#scene-caption').textContent = `放回「${name}」`;
+    await wait(850);
+    if (rid !== state.runId) return;
+
+    doneMl += ml;
+    markSteps(i + 1, -1);
+    renderLiquid(c, i, ml);
+    setProgress((doneMl / totalMl) * 100);
+  }
+
+  // ---- 6. 完成 ----
+  setPose('rest');
+  $('#scene-caption').textContent = '出餐完成';
+  setProgress(100);
+  setOrb('speaking');
+  say(`您的${c.name}好了，请取杯。`, 3000);
+  await wait(1600);
+  if (rid !== state.runId) return;
+
+  state.ready = true;
+  go('done');                       // go() 里会自动调用 onEnterDone()
+}
+
+/* ==========================================================================
+   七、语音交互（右侧面板）
+   ========================================================================== */
+
+let voices = [];
+
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  voices = window.speechSynthesis.getVoices() || [];
+}
+if ('speechSynthesis' in window) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function tts(text) {
+  if (state.muted || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN';
+    u.rate = 1.0;
+    u.pitch = 1.0;
+    u.volume = 0.95;
+    const v = voices.find((x) => /zh|Chinese|Huihui|Xiaoxiao|Yaoyao|Kangkang/i.test(x.lang + x.name));
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+  } catch (e) { /* 有些浏览器不支持，忽略即可 */ }
+}
+
+function buildWave() {
+  $('#wave').innerHTML = Array.from({ length: 24 }, () => '<i></i>').join('');
+}
+
+function setOrb(mode) {
+  const orb = $('#orb');
+  orb.className = 'orb ' + mode;
+  const map = { listening: ['聆听中', '说句话，或点下面的快捷指令'], speaking: ['说话中', '调酒师正在回应'], idle: ['待机中', ''] };
+  const [a, b] = map[mode] || map.idle;
+  $('#voice-state').textContent = a;
+  $('#voice-sub').textContent = b;
+  $('#wave').classList.toggle('on', mode === 'speaking');
+}
+
+function bubble(text, who) {
+  const el = document.createElement('div');
+  el.className = 'bubble ' + who;
+  el.textContent = text;
+  $('#chat').appendChild(el);
+  $('#chat').scrollTop = $('#chat').scrollHeight;
+  return el;
+}
+
+function clearChat() {
+  $('#chat').innerHTML = '';
+  bubble('晚上好，欢迎来到琥珀酒馆。', 'bot');
+}
+
+function say(text, dur) {
+  bubble(text, 'bot');
+  setOrb('speaking');
+  tts(text);
+  clearTimeout(say._t);
+  say._t = setTimeout(() => {
+    if (state.page === 'make') setOrb('listening');
+  }, Math.max(1200, dur || 2400));
+}
+
+function userSay(text) {
+  bubble(text, 'user');
+}
+
+function buildQuick() {
+  const cmds = [
+    ['再来一杯', '好的，回到酒单，您慢慢挑。'],
+    ['快好了吗', '正在倒最后一种，马上就好。'],
+    ['今天推荐什么', '古典最见功夫，莫吉托最凉快，看您今晚想清醒还是想放松。'],
+    ['谢谢', '不客气，慢慢喝。']
+  ];
+  $('#quick').innerHTML = cmds.map((c, i) => `<button data-i="${i}">${c[0]}</button>`).join('');
+  $('#quick').addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    const [q, a] = cmds[+b.dataset.i];
+    userSay(q);
+    setTimeout(() => say(a, 3000), 320);
+  });
+
+  $('#mic').addEventListener('click', () => {
+    const btn = $('#mic');
+    if (btn.classList.contains('rec')) return;
+    btn.classList.add('rec');
+    setOrb('listening');
+    setTimeout(() => {
+      btn.classList.remove('rec');
+      const lines = ['酒好了吗', '这杯好喝', '再来一杯', '谢谢老板'];
+      const t = lines[Math.floor(Math.random() * lines.length)];
+      userSay(t);
+      setTimeout(() => say('收到，' + (t === '再来一杯' ? '我这就给您再调一杯。' : '您慢用，有需要随时叫我。'), 2600), 400);
+    }, 1200);
+  });
+
+  // 声音开关
+  const snd = document.createElement('button');
+  snd.className = 'mic';
+  snd.id = 'btn-sound';
+  snd.textContent = '🔊';
+  snd.title = '开关语音播报';
+  snd.style.fontSize = '15px';
+  snd.addEventListener('click', () => {
+    state.muted = !state.muted;
+    snd.textContent = state.muted ? '🔇' : '🔊';
+    if (state.muted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+  });
+  $('.mic-row').insertBefore(snd, $('#mode-text'));
+  $('#mode-text').textContent = '离线演示：所有环节都在本页面内完成，不需要服务器';
+}
+
+/* ==========================================================================
+   八、完成页
+   ========================================================================== */
+
+let doneTimer = null;
+
+function onEnterDone() {
+  const c = state.current;
+  if (!c) return;
+
+  $('#done-art').innerHTML = artSVG(c, 'done');
+  $('#done-title').textContent = `${c.name} 已就位`;
+  $('#done-sub').textContent = `${c.glassName} · ${c.abv}% VOL · 请到吧台取杯`;
+
+  const box = $('#done-voice');
+  box.innerHTML = '';
+  clearTimeout(doneTimer);
+
+  doneTimer = setTimeout(() => {
+    const b1 = document.createElement('div');
+    b1.className = 'bubble bot';
+    b1.textContent = `您的${c.name}好了，请取杯。`;
+    box.appendChild(b1);
+    tts(`您的${c.name}好了，请取杯。`);
+
+    doneTimer = setTimeout(() => {
+      const b2 = document.createElement('div');
+      b2.className = 'bubble bot';
+      b2.textContent = '感谢光临，欢迎下次光临。';
+      box.appendChild(b2);
+      tts('感谢光临，欢迎下次光临。');
+    }, 2600);
+  }, 700);
+}
+
+/* ==========================================================================
+   九、启动
+   ========================================================================== */
+
+function bindEvents() {
+  $('#btn-enter').addEventListener('click', () => go('order'));
+
+  $('#grid').addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const c = COCKTAILS.find((x) => x.id === card.dataset.id);
+    if (c) openDetail(c);
+  });
+
+  $('#btn-pay').addEventListener('click', () => {
+    if (detailTarget) openPay(detailTarget);
+  });
+
+  $('#btn-paid').addEventListener('click', confirmPaid);
+
+  // 微信 / 支付宝 切换
+  $$('.tab').forEach((t) => {
+    t.addEventListener('click', () => switchMethod(t.dataset.method));
+  });
+
+  // 中止这一杯（相当于急停）
+  $('#btn-abort').addEventListener('click', () => {
+    if (!window.confirm('确定中止这一杯吗？')) return;
+    state.runId++;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    go('order');
+  });
+
+  $('#btn-again').addEventListener('click', () => {
+    state.runId++;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    go('order');
+  });
+
+  $('#btn-leave').addEventListener('click', () => {
+    state.runId++;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    go('welcome');
+  });
+}
+
+function boot() {
+  $('#tavern-host').innerHTML = tavernBG();
+  renderGrid();
+  buildScene();
+  buildWave();
+  buildQuick();
+  bindModals();
+  bindEvents();
+  clearChat();
+  go('welcome');
+}
+
+boot();
+</script>
+</body>
+</html>
